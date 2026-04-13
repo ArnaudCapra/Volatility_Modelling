@@ -115,68 +115,124 @@ def plot_term_structure_comparison(fit_essvi, fit_local, df_smile=None, dk_band=
     plt.show()
 
     
+_DEFAULT_COLORS = [
+    "#636EFA", "#EF553B", "#00CC96", "#AB63FA",
+    "#FFA15A", "#19D3F3", "#FF6692", "#B6E880",
+]
+_DEFAULT_COLORS_FIT = [
+    "#a0a8fc", "#f0a09a", "#80e8c0", "#d4a0fc",
+    "#ffd0a0", "#80e8f8", "#ffaabb", "#d4f0b0",
+]
+
 def plot_power_law_term_structure(
-    series,
+    *methods,
+    T_col,
+    y_col,
     title="Power-Law Term Structure",
     x_label="Log(T)",
     y_label="Log(|y|)",
+    labels=None,
+    colors=None,
+    colors_fit=None,
+    markers=None,
+    dashes=None,
     min_pts=3,
 ):
     """
-    Generic BIC-selected piecewise power-law plot in log-log space.
+    BIC-selected piecewise power-law plot in log-log space.
 
     Parameters
     ----------
-    series : list of dicts, each with keys:
-        - "T"      : array-like of maturities (linear scale, positive)
-        - "y"      : array-like of values     (linear scale, will take abs+log)
-        - "label"  : str, legend name
-        - "color"  : str, colour for dots
-        - "color_fit" : str, colour for regression lines (optional, defaults to "color")
-        - "marker" : str, matplotlib/plotly marker symbol (optional, default "circle")
-        - "dash"   : plotly dash style for the single-fit line (optional, default "solid")
+    *methods : DataFrames
+        Each positional argument is a DataFrame (e.g. fit_essvi["summary"],
+        fwd["local"], fd_skew). NaN rows are silently dropped.
 
-    title, x_label, y_label : plot labels
-    min_pts : minimum points per segment in BIC search
+    T_col : str | list[str]
+        Column name(s) for maturities. A single string is broadcast to all
+        methods; a list must match len(methods).
+
+    y_col : str | list[str]
+        Column name(s) for the values (absolute value + log applied internally).
+        A single string is broadcast; a list must match len(methods).
+
+    title, x_label, y_label : str
+        Plot labels.
+
+    labels : list[str] | None
+        Legend names, one per method. Defaults to "Series 0", "Series 1", …
+
+    colors : list[str] | None
+        Dot colours. Defaults to _DEFAULT_COLORS cycling.
+
+    colors_fit : list[str] | None
+        Regression-line colours. Defaults to _DEFAULT_COLORS_FIT cycling.
+
+    markers : list[str] | None
+        Plotly marker symbols. Defaults to "circle".
+
+    dashes : list[str] | None
+        Plotly dash styles for the single-fit line. Defaults to "solid".
+
+    min_pts : int
+        Minimum points per segment in BIC search.
 
     Returns
     -------
-    plotly Figure (also calls fig.show())
+    plotly Figure
 
-    Example — spot skew
-    --------------------
-    series = [
-        {"T": essvi_sum["T"].to_numpy(), "y": essvi_sum["atm_skew"].to_numpy(),
-         "label": "eSSVI",      "color": _C["eSSVI"],  "color_fit": "#f0a09a"},
-        {"T": local_sum["T"].to_numpy(), "y": local_sum["atm_skew"].to_numpy(),
-         "label": "Local Quad", "color": _C["local"],  "color_fit": "#9ac4f0"},
-        {"T": fd_ok["T"].to_numpy(),     "y": fd_ok["fd_atm_skew"].to_numpy(),
-         "label": "FD Market",  "color": "#e69c3c",    "color_fit": "#f0cfa0"},
-    ]
-    plot_power_law_term_structure(series, title="ATM Skew Power-Law", ...)
+    Examples
+    --------
+    # Spot skew
+    plot_power_law_term_structure(
+        fit_essvi["summary"], fit_local["summary"], fd_skew,
+        T_col="T",
+        y_col=["atm_skew", "atm_skew", "fd_atm_skew"],
+        labels=["eSSVI", "Local Quad", "FD Market"],
+        colors=[_C["eSSVI"], _C["local"], "#e69c3c"],
+        colors_fit=["#f0a09a", "#9ac4f0", "#f0cfa0"],
+        title="ATM Spot Skew — Power-Law Term Structure",
+        x_label="Log(T)", y_label="Log(|ATM Skew|)",
+    )
 
-    Example — forward skew
-    -----------------------
-    fwd = compute_atm_forward_skew(fit_essvi, fit_local, df_smile)
-    series = [
-        {"T": fwd["eSSVI"]["T_mid"].to_numpy(), "y": fwd["eSSVI"]["fwd_skew"].to_numpy(),
-         "label": "eSSVI fwd",  "color": _C["eSSVI"],  "color_fit": "#f0a09a"},
-        ...
-    ]
-    plot_power_law_term_structure(series, title="ATM Forward Skew Power-Law", ...)
+    # Forward skew  (uniform columns → single string)
+    plot_power_law_term_structure(
+        fwd["eSSVI"], fwd["local"], fwd["fd"],
+        T_col="T_mid",
+        y_col="fwd_skew",
+        labels=["eSSVI fwd", "Local Quad fwd", "FD Market fwd"],
+        colors=[_C["eSSVI"], _C["local"], "#e69c3c"],
+        colors_fit=["#f0a09a", "#9ac4f0", "#f0cfa0"],
+        title="ATM Forward Skew — Power-Law Term Structure",
+        x_label="Log(T_mid = √(T₁·T₂))", y_label="Log(|Fwd Skew|)",
+    )
     """
+    n = len(methods)
+
+    # --- broadcast scalar → list ------------------------------------------------
+    def _broadcast(val, name):
+        if isinstance(val, str):
+            return [val] * n
+        if val is None or len(val) == n:
+            return val
+        raise ValueError(f"`{name}` must be a str or a list of length {n}.")
+
+    T_cols     = _broadcast(T_col, "T_col")
+    y_cols     = _broadcast(y_col, "y_col")
+    labels     = labels     or [f"Series {i}" for i in range(n)]
+    colors     = colors     or [_DEFAULT_COLORS[i % len(_DEFAULT_COLORS)]     for i in range(n)]
+    colors_fit = colors_fit or [_DEFAULT_COLORS_FIT[i % len(_DEFAULT_COLORS_FIT)] for i in range(n)]
+    markers    = markers    or ["circle"] * n
+    dashes     = dashes     or ["solid"]  * n
+
+    # ---------------------------------------------------------------------------
     fig = go.Figure()
 
-    for s in series:
-        T_vals    = np.asarray(s["T"],     dtype=float)
-        y_vals    = np.abs(np.asarray(s["y"], dtype=float))
-        label     = s["label"]
-        c_dot     = s["color"]
-        c_fit     = s.get("color_fit", c_dot)
-        marker    = s.get("marker", "circle")
-        base_dash = s.get("dash", "solid")
+    for df, tc, yc, label, c_dot, c_fit, marker, base_dash in zip(
+        methods, T_cols, y_cols, labels, colors, colors_fit, markers, dashes
+    ):
+        T_vals = np.asarray(df[tc], dtype=float)
+        y_vals = np.abs(np.asarray(df[yc], dtype=float))
 
-        # Filter and sort
         mask = (T_vals > 0) & (y_vals > 0) & np.isfinite(T_vals) & np.isfinite(y_vals)
         if mask.sum() < 4:
             continue
@@ -186,7 +242,6 @@ def plot_power_law_term_structure(
         order = np.argsort(lt)
         lt, ly = lt[order], ly[order]
 
-        # Raw dots
         fig.add_trace(go.Scatter(
             x=lt, y=ly, mode="markers",
             name=label,
@@ -197,21 +252,18 @@ def plot_power_law_term_structure(
         use_split, sp, single, seg1, seg2 = _bic_piecewise(lt, ly, min_pts=min_pts)
 
         if use_split:
-            segments = [
+            for seg_lt, seg_ly, p, tag, dash in [
                 (lt[:sp], ly[:sp], seg1, "short", "solid"),
                 (lt[sp:], ly[sp:], seg2, "long",  "dash"),
-            ]
-            for seg_lt, seg_ly, p, tag, dash in segments:
+            ]:
                 fig.add_trace(go.Scatter(
                     x=seg_lt,
                     y=p["intercept"] + p["slope"] * seg_lt,
                     mode="lines",
-                    name=(f"{label} — {tag} "
-                          f"(β={p['slope']:.3f}, R²={p['r2']:.3f})"),
+                    name=f"{label} — {tag} (β={p['slope']:.3f}, R²={p['r2']:.3f})",
                     line=dict(color=c_fit, width=2, dash=dash),
                     legendgroup=label,
                 ))
-
             split_x = (lt[sp - 1] + lt[sp]) / 2
             fig.add_vline(
                 x=split_x,
@@ -226,8 +278,7 @@ def plot_power_law_term_structure(
                 x=lt,
                 y=p["intercept"] + p["slope"] * lt,
                 mode="lines",
-                name=(f"{label} — single "
-                      f"(β={p['slope']:.3f}, R²={p['r2']:.3f})"),
+                name=f"{label} — single (β={p['slope']:.3f}, R²={p['r2']:.3f})",
                 line=dict(color=c_fit, width=2, dash=base_dash),
                 legendgroup=label,
             ))

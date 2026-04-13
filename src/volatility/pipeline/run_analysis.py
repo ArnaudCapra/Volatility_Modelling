@@ -8,35 +8,25 @@ from src.volatility.visualization.smiles import _C
 
 fd_skew = compute_fd_atm_skew(df_smile)
 
-fd_ok = fd_skew[fd_skew["fd_atm_skew"].notna()]
-
-f_series=[
-        {"T": fit_essvi["summary"]["T"].to_numpy(),
-         "y": fit_essvi["summary"]["atm_skew"].to_numpy(),
-         "label": "eSSVI",      "color": _C["eSSVI"], "color_fit": "#f0a09a"},
-        {"T": fit_local["summary"]["T"].to_numpy(),
-         "y": fit_local["summary"]["atm_skew"].to_numpy(),
-         "label": "Local Quad", "color": _C["local"], "color_fit": "#9ac4f0"},
-        {"T": fd_ok["T"].to_numpy(),
-         "y": fd_ok["fd_atm_skew"].to_numpy(),
-         "label": "FD Market",  "color": "#e69c3c",   "color_fit": "#f0cfa0"},
-    ]
-
-
-plot_power_law_term_structure(series=f_series, title="ATM Spot Skew — Power-Law Term Structure", x_label="Log(T)", y_label="Log(|ATM Skew|)")
-
+plot_power_law_term_structure(
+    fit_essvi["summary"], fit_local["summary"], fd_skew,
+    T_col="T",
+    y_col=["atm_skew", "atm_skew", "fd_atm_skew"],
+    labels=["eSSVI", "Local Quad", "FD Market"],
+    colors=[_C["eSSVI"], _C["local"], "#e69c3c"],
+    colors_fit=["#f0a09a", "#9ac4f0", "#f0cfa0"],
+    title="ATM Spot Skew — Power-Law Term Structure",
+    x_label="Log(T)", y_label="Log(|ATM Skew|)",
+)
 fwd = compute_atm_forward_skew(fit_essvi, fit_local, df_smile=df_smile)
 
-fk_series=[
-        {"T": fwd["eSSVI"]["T_mid"].to_numpy(),
-         "y": fwd["eSSVI"]["fwd_skew"].to_numpy(),
-         "label": "eSSVI fwd",      "color": _C["eSSVI"], "color_fit": "#f0a09a"},
-        {"T": fwd["local"]["T_mid"].to_numpy(),
-         "y": fwd["local"]["fwd_skew"].to_numpy(),
-         "label": "Local Quad fwd", "color": _C["local"], "color_fit": "#9ac4f0"},
-        {"T": fwd["fd"]["T_mid"].to_numpy(),
-         "y": fwd["fd"]["fwd_skew"].to_numpy(),
-         "label": "FD Market fwd",  "color": "#e69c3c",   "color_fit": "#f0cfa0"},
-    ]
-
-plot_power_law_term_structure(series=fk_series,title="ATM Forward Skew — Power-Law Term Structure",x_label="Log(T_mid = √(T₁·T₂))", y_label="Log(|Fwd Skew|)")
+plot_power_law_term_structure(
+    fwd["eSSVI"], fwd["local"], fwd["fd"],
+    T_col="T_mid",
+    y_col="fwd_skew",
+    labels=["eSSVI fwd", "Local Quad fwd", "FD Market fwd"],
+    colors=[_C["eSSVI"], _C["local"], "#e69c3c"],
+    colors_fit=["#f0a09a", "#9ac4f0", "#f0cfa0"],
+    title="ATM Forward Skew — Power-Law Term Structure",
+    x_label="Log(T_mid = √(T₁·T₂))", y_label="Log(|Fwd Skew|)",
+)
