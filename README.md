@@ -19,11 +19,11 @@ The authors allude that this could be resolved if the **Hurst exponent were itse
 The volatility process is driven by a **Mandelbrot–Van Ness kernel** applied to a CIR process — the rough Heston construction — but with one critical modification: the Hurst exponent $H_s$ is **adapted to the filtration $\mathcal{F}_s$** of the Brownian motion $B(\omega_2)$ with respect to which the kernel is integrated.
 
 $$\begin{cases}
-\dfrac{dS_t}{S_t} = \mu \, dt + \sqrt{v_t} \, dB_t(\omega_1) \[8pt]
-v_t = v_0 + \displaystyle\int_{-\infty}^{t} K(t-s,\, H_s)\, dY_s \[8pt]
-dY_t = \kappa(\theta - v_t)\,dt + \xi\sqrt{v_t}\,dB_t(\omega_2) \[8pt]
-K(t-s, H_s) = \dfrac{\sqrt{2H_s\,\sin(\pi H_s)\,\Gamma(2H_s)}}{\Gamma\!\left(H_s + \tfrac{1}{2}\right)} \left[(t-s)_{+}^{H_s+\frac{1}{2}} - (-s)_{+}^{H_s+\frac{1}{2}}\right] \[8pt]
-dH_t = \lambda(\eta - H_t)\,dt + \zeta\sqrt{H_t(1 - H_t)}\,dB_t(\omega_3)
+\frac{dS_t}{S_t} = \mu dt + \sqrt{v_t} dB_t(\omega_1) \\
+v_t = v_0 + \int_{-\infty}^{t} K(t-s, H_s) dY_s \\
+dY_t = \kappa(\theta - v_t)dt + \xi\sqrt{v_t}dB_t(\omega_2) \\
+K(t-s, H_s) = \frac{\sqrt{2H_s \sin(\pi H_s) \Gamma(2H_s)}}{\Gamma(H_s + \frac{1}{2})} \left[ (t-s)_{+}^{H_s+\frac{1}{2}} - (-s)_{+}^{H_s+\frac{1}{2}} \right] \\
+dH_t = \lambda(\eta - H_t)dt + \zeta\sqrt{H_t(1 - H_t)}dB_t(\omega_3)
 \end{cases}$$
 
 The three Brownian drivers $(\omega_1, \omega_2, \omega_3)$ are **correlated white noise**, making the skew, vol-of-vol, and roughness structurally interdependent.
