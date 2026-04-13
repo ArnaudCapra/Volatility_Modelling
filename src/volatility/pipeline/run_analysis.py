@@ -30,3 +30,4 @@ plot_power_law_term_structure(
     title="ATM Forward Skew — Power-Law Term Structure",
     x_label="Log(T_mid = √(T₁·T₂))", y_label="Log(|Fwd Skew|)",
 )
+

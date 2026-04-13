@@ -3,6 +3,7 @@ import pandas as pd
 from src.volatility.pricing.BlackScholes import black_price_forward
 from scipy.optimize import brentq
 
+
 def get_iv_from_forward(price, F, K, T, D, option_type):
     """Invert Black-76 implied volatility from an option price."""
     if any(pd.isna(x) for x in [price, F, K, T, D]):
@@ -31,4 +32,11 @@ def get_iv_from_forward(price, F, K, T, D, option_type):
 
     except Exception:
         return np.nan
+
+def bs_implied_vol(tau, x, k, price, tol=1e-8):
+    """Scalar implied vol via Brent's method."""
+    lb = max(float(np.exp(x)) - float(np.exp(k)), 0.0)
+    if float(price) <= lb + tol:
+        return 0.0
+    return brentq(lambda s: black_price_forward( F=np.exp(x), K=np.exp(k), T=tau, D=1.0, sigma=s, option_type="call") - price, 1e-6, 10.0, xtol=tol)
 
