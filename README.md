@@ -22,8 +22,8 @@ $$\begin{cases}
 \dfrac{dS_t}{S_t} = \mu \, dt + \sqrt{v_t} \, dB_t(\omega_1) \\[8pt]
 v_t = v_0 + \displaystyle\int_{-\infty}^{t} K(t-s,\, H_s)\, dY_s \\[8pt]
 dY_t = \kappa(\theta - v_t)\,dt + \xi\sqrt{v_t}\,dB_t(\omega_2) \\[8pt]
-K(t-s, H_s) = \dfrac{\sqrt{2H_s\,\sin(\pi H_s)\,\Gamma(2H_s)}}{\Gamma\!\left(H_s + \tfrac{1}{2}\right)} \left[(t-s)_+^{H_s+\frac{1}{2}} - (-s)_+^{H_s+\frac{1}{2}}\right] \\[8pt]
-dH_t = \lambda(\eta - H_t)\,dt + \zeta\sqrt{H_t(1 - H_t)}\,B_t(\omega_3)
+K(t-s, H_s) = \dfrac{\sqrt{2H_s\,\sin(\pi H_s)\,\Gamma(2H_s)}}{\Gamma\!\left(H_s + \tfrac{1}{2}\right)} \left[(t-s)_{+}^{H_s+\frac{1}{2}} - (-s)_{+}^{H_s+\frac{1}{2}}\right] \\[8pt]
+dH_t = \lambda(\eta - H_t)\,dt + \zeta\sqrt{H_t(1 - H_t)}\,dB_t(\omega_3)
 \end{cases}$$
 
 The three Brownian drivers $(\omega_1, \omega_2, \omega_3)$ are **correlated white noise**, making the skew, vol-of-vol, and roughness structurally interdependent.
