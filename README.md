@@ -156,7 +156,7 @@ plotly
 - El Euch, O. & Rosenbaum, M. (2019). *The characteristic function of rough Heston models.*
 - Gatheral, J. et al. (2018). *Volatility is rough.*
 - Gatheral, J. & Jacquier, A. (2014). *Arbitrage-free SVI volatility surfaces.*
-- Guennoun, H. et al. *Yet Another Analysis of the S&P 500 At-the-Money Skew: Crossover of Different Power-Law Behaviours.*
+- Delemotte, J. Ségonne, F., de Marco, S (2024). *Yet Another Analysis of the S&P 500 At-the-Money Skew: Crossover of Different Power-Law Behaviours.*
 - Horvath, B., Muguruza, A. & Tomas, M. (2021). *Deep Learning Volatility.*
-- Lebovits, J. & Levy Vehel, J. *Regularity of Multifractional Moving Average Processes with Random Hurst Exponent.*
+- Loboda, D. Mies, F. Steland, A. (2021) *Regularity of Multifractional Moving Average Processes with Random Hurst Exponent.*
 - Nualart, D. (2006). *The Malliavin Calculus and Related Topics.*
