@@ -15,7 +15,7 @@ r     = 0.0
 maturities = np.arange(0.075, 1.11, 0.1)
 strikes    = np.linspace(0.8, 1.2, 9)
 
-raw = heston_malliavin_surface(kappa, theta, xi, rho, S0, v0, maturities, strikes, N_paths= 25_000)
+raw = heston_malliavin_surface(kappa, theta, xi, rho, S0, v0, maturities, strikes, N_paths= 5_000)
 
 fig = plot_iv_surface_interactive(
     df_smile=None,
