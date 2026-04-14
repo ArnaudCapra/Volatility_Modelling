@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from src.volatility.calibration.weights import quote_weight
 from src.volatility.models.essiv import rho_of_theta
-from src.volatility.market.parity import EPS
+from src.volatility.config.config import WEIGHT_EPS
 def compute_fd_atm_skew(df_smile, dk_band=0.05):
     """
     Per-maturity finite-difference ATM skew from raw market IVs.
@@ -112,8 +112,8 @@ def compute_atm_forward_skew(fit_essvi, fit_local, df_smile=None, dk_band=0.05):
 
         rh1 = float(rho_of_theta(th1, rho_inf, rho_0, c_rho))
         rh2 = float(rho_of_theta(th2, rho_inf, rho_0, c_rho))
-        ph1 = eta / max(th1, EPS) ** gamma
-        ph2 = eta / max(th2, EPS) ** gamma
+        ph1 = eta / max(th1, WEIGHT_EPS) ** gamma
+        ph2 = eta / max(th2, WEIGHT_EPS) ** gamma
 
         # ∂w/∂k|_{k=0} = θ·ρ·φ  for each knot
         dw1 = th1 * rh1 * ph1

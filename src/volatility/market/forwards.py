@@ -1,8 +1,10 @@
 from src.volatility.market.parity import infer_forward_from_parity
 import numpy as np
 import pandas as pd 
+from src.volatility.config.config import PARITY_MIN_OPEN_INTEREST, PARITY_MAX_REL_SPREAD
 
-def infer_forward_by_maturity(df_open, min_open_interest=50, max_rel_spread=0.25):
+
+def infer_forward_by_maturity(df_open, min_open_interest=PARITY_MIN_OPEN_INTEREST, max_rel_spread=PARITY_MAX_REL_SPREAD):
     rows = []
     for tdays, sl in df_open.groupby("T_days"):
         F, D, n_pairs = infer_forward_from_parity(

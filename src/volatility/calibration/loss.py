@@ -1,7 +1,6 @@
 import numpy as np
 from src.volatility.models.essiv import essvi_total_variance, rho_of_theta
-from src.volatility.market.parity import EPS
-
+from src.volatility.config.config import WEIGHT_EPS
 
 def _unpack_essvi_params(x, n_t):
     theta_knots = np.cumsum(np.exp(x[:n_t]))
@@ -28,7 +27,7 @@ def essvi_residuals(x, data, T_knots, lam_bfly=25.0):
 
     # Butterfly no-arb penalty at each knot
     rho_k     = rho_of_theta(theta_knots, rho_inf, rho_0, c_rho)
-    phi_knots = eta / np.maximum(theta_knots, EPS) ** gamma
+    phi_knots = eta / np.maximum(theta_knots, WEIGHT_EPS) ** gamma
     arb       = theta_knots * phi_knots * (1.0 + np.abs(rho_k)) - 4.0
     arb_pen   = np.sqrt(lam_bfly) * np.maximum(0.0, arb)
 

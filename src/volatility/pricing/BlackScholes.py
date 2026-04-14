@@ -65,3 +65,10 @@ def H_func(tau, x, k, sigma):
     g     = G_func(tau, x, k, sigma)
     return g * (1.0 - d1 / (sigma * np.sqrt(tau)))
 
+def dH_dk(tau, x, k, sigma, tau_min=1e-3):
+    """Closed-form ∂H/∂k."""
+    tau_r = np.maximum(tau, tau_min)
+    m     = sigma * np.sqrt(tau_r)                    # σ√τ
+    d1, _ = _d1d2(tau_r, x, k, sigma)
+    g     = G_func(tau_r, x, k, sigma)
+    return g * (1.0 + d1 * m - d1**2) / m**2

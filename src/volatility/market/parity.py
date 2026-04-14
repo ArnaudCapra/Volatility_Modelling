@@ -1,10 +1,10 @@
 from src.volatility.data.quotes import side_fields 
 from scipy.optimize import least_squares
 import numpy as np
+from src.volatility.config.config import WEIGHT_EPS, PARITY_MIN_OPEN_INTEREST, PARITY_MAX_REL_SPREAD
 
-EPS = 1e-12 
 
-def liquidity_mask(df, side, min_open_interest=50, max_rel_spread=0.25):
+def liquidity_mask(df, side, min_open_interest=PARITY_MIN_OPEN_INTEREST, max_rel_spread=PARITY_MAX_REL_SPREAD):
     f = side_fields(side)
 
     bid = df[f["bid"]]
@@ -25,7 +25,7 @@ def liquidity_mask(df, side, min_open_interest=50, max_rel_spread=0.25):
     return ok
 
 
-def infer_forward_from_parity(slice_df, min_open_interest=50, max_rel_spread=0.25):
+def infer_forward_from_parity(slice_df, min_open_interest=PARITY_MIN_OPEN_INTEREST, max_rel_spread=PARITY_MAX_REL_SPREAD):
     """
     Per maturity: C - P = D(F - K) = alpha + beta*K
     beta = -D,  alpha = D*F  =>  F = -alpha/beta
@@ -58,7 +58,7 @@ def infer_forward_from_parity(slice_df, min_open_interest=50, max_rel_spread=0.2
     spread = c_rs + p_rs
 
     k0 = np.median(sub["K"].to_numpy())
-    w = 1.0 / ((spread + EPS) * (1.0 + 0.5 * np.abs(np.log(sub["K"] / k0))))
+    w = 1.0 / ((spread + WEIGHT_EPS) * (1.0 + 0.5 * np.abs(np.log(sub["K"] / k0))))
     w = np.clip(w.to_numpy(), 1e-8, 1e8)
 
     X = np.column_stack([np.ones(len(sub)), sub["K"].to_numpy()])

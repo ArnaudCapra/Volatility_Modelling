@@ -1,6 +1,6 @@
 from src.volatility.models.essiv import essvi_total_variance
 import numpy as np
-from src.volatility.market.parity import EPS
+from src.volatility.config.config import WEIGHT_EPS
 
 
 def _iv_essvi(fit, T, k_grid):
@@ -8,5 +8,5 @@ def _iv_essvi(fit, T, k_grid):
     w = essvi_total_variance(k_grid, theta,
                              fit["rho_inf"], fit["rho_0"],
                              fit["c_rho"],   fit["eta"], fit["gamma"])
-    return np.sqrt(np.clip(w, EPS, None) / T)
+    return np.sqrt(np.clip(w, WEIGHT_EPS, None) / T)
 

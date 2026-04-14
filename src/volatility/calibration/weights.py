@@ -1,13 +1,13 @@
 import numpy as np
 import pandas as pd
-from src.volatility.market.parity import EPS
+from src.volatility.config.config import WEIGHT_EPS
 
 def quote_weight(iv, T, rel_spread, oi=None):
     """Maturity-aware weight: tighter spreads, higher OI, longer tenor."""
-    iv = max(float(iv), EPS)
-    T  = max(float(T),  EPS)
+    iv = max(float(iv), WEIGHT_EPS)
+    T  = max(float(T),  WEIGHT_EPS)
 
-    spread_term = 1.0 / (float(rel_spread) + EPS) if pd.notna(rel_spread) and rel_spread > 0 else 1.0
+    spread_term = 1.0 / (float(rel_spread) + WEIGHT_EPS) if pd.notna(rel_spread) and rel_spread > 0 else 1.0
 
     oi_term = 1.0
     if oi is not None and pd.notna(oi):

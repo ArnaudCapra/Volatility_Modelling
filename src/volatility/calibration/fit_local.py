@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from src.volatility.calibration.weights import quote_weight
 from src.volatility.models.local_quad import _fit_quadratic_slice
-from src.volatility.market.parity import EPS
+from src.volatility.config.config import WEIGHT_EPS
 
 
 def fit_localized_surface(df_smile, min_strikes=5):
@@ -34,7 +34,7 @@ def fit_localized_surface(df_smile, min_strikes=5):
 
         a, b, c = _fit_quadratic_slice(k, w, wts)
         w_fit   = a + b * k + c * k ** 2
-        atm_iv  = np.sqrt(max(a, EPS) / T)
+        atm_iv  = np.sqrt(max(a, WEIGHT_EPS) / T)
 
         slices.append({
             "T_days":    int(tdays),
@@ -59,7 +59,7 @@ def fit_localized_surface(df_smile, min_strikes=5):
         a_i = float(np.interp(T_query, T_grid, summary["a"].to_numpy()))
         b_i = float(np.interp(T_query, T_grid, summary["b"].to_numpy()))
         c_i = float(np.interp(T_query, T_grid, summary["c"].to_numpy()))
-        return np.clip(a_i + b_i * k_query + c_i * k_query ** 2, EPS, None)
+        return np.clip(a_i + b_i * k_query + c_i * k_query ** 2, WEIGHT_EPS, None)
 
     return {
         "method":         "Localized Quadratic",

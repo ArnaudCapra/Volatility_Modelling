@@ -1,10 +1,13 @@
 import numpy as np
 import pandas as pd
-from src.volatility.market.parity import EPS
+from src.volatility.config.config import WEIGHT_EPS
 from src.volatility.calibration.weights import quote_weight
 from src.volatility.calibration.loss import essvi_residuals, _unpack_essvi_params
 from scipy.optimize import least_squares
 from src.volatility.models.essiv import essvi_total_variance, rho_of_theta
+from src.volatility.config.config import ESSVI_LAMBDA_BUTTERFLY
+
+
 
 
 def estimate_theta_knots(df_smile, max_nearest=7):
@@ -91,7 +94,7 @@ def fit_essvi_surface(df_smile):
 
     res = least_squares(
         essvi_residuals, x0=x0,
-        args=(data, T_knots, 25.0),
+        args=(data, T_knots, ESSVI_LAMBDA_BUTTERFLY),
         loss="soft_l1", f_scale=1.0,
         max_nfev=80000, method="trf",
     )
@@ -106,7 +109,7 @@ def fit_essvi_surface(df_smile):
     per_mat = []
     for t, theta in zip(T_knots, theta_knots):
         rho_t  = float(rho_of_theta(theta, rho_inf, rho_0, c_rho))
-        phi_t  = eta / max(theta, EPS) ** gamma
+        phi_t  = eta / max(theta, WEIGHT_EPS) ** gamma
         atm_iv = np.sqrt(theta / t)
         per_mat.append({
             "T":        float(t),

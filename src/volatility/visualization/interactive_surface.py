@@ -91,7 +91,7 @@ def plot_iv_surface_interactive(df_smile, surface_result,
         k_lo, k_hi = float(k_range[0]), float(k_range[1])
     elif df_smile is not None and not df_smile.empty:
         k_obs = np.log(
-            df_smile["STRIKE"].astype(float) / df_smile["FORWARD_AT_TARGET"].astype(float)
+            df_smile["STRIKE"].astype(float) / df_smile["F_parity"].astype(float)
         )
         k_obs = k_obs[np.isfinite(k_obs)]
         if len(k_obs) == 0:
