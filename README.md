@@ -22,7 +22,7 @@ $$\begin{cases}
 \frac{dS_t}{S_t} = \mu dt + \sqrt{v_t} dB_t(\omega_1) \\
 v_t = v_0 + \int_{-\infty}^{t} K(t-s, H_s) dY_s \\
 dY_t = \kappa(\theta - v_t)dt + \xi\sqrt{v_t}dB_t(\omega_2) \\
-K(t-s, H_s) = \frac{\sqrt{2H_s \sin(\pi H_s) \Gamma(2H_s)}}{\Gamma(H_s + \frac{1}{2})} \left[ (t-s)_{+}^{H_s+\frac{1}{2}} - (-s)_{+}^{H_s+\frac{1}{2}} \right] \\
+K(t-s, H_s) = \frac{\sqrt{2H_s \sin(\pi H_s) \Gamma(2H_s)}}{\Gamma(H_s + \frac{1}{2})} \left[ (t-s)_{+}^{H_s-\frac{1}{2}} - (-s)_{+}^{H_s-\frac{1}{2}} \right] \\
 dH_t = \lambda(\eta - H_t)dt + \zeta\sqrt{H_t(1 - H_t)}dB_t(\omega_3)
 \end{cases}$$
 
