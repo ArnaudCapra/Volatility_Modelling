@@ -59,15 +59,45 @@ def _make_total_var_predictor(surface_result: dict):
 
         return predict
 
+    elif method in ("Heston-dI0_dk", "Heston-dI_dk", "Heston-skew_corr"):
+        skew_key = {"Heston-dI0_dk": "dI0_dk", "Heston-dI_dk": "dI_dk", "Heston-skew_corr": "skew_corr"}[method]
+        raw    = surface_result["raw"]
+
+        T_grid = np.array(sorted({T for T, K in raw}), dtype=float)
+        K_grid = np.array(sorted({K for T, K in raw}), dtype=float)
+        k_grid = np.log(K_grid)
+
+        skew_array = np.full((len(T_grid), len(k_grid)), np.nan)
+        for i, T in enumerate(T_grid):
+            for j, K in enumerate(K_grid):
+                val = raw.get((T, K), {}).get(skew_key, np.nan)
+                if val is not None and np.isfinite(val):
+                    skew_array[i, j] = val
+
+        def predict(T_query, k_query):
+            k_query   = np.asarray(k_query, dtype=float)
+            T_clamped = np.clip(T_query, T_grid[0], T_grid[-1])
+            i_lo = int(np.clip(np.searchsorted(T_grid, T_clamped, side="right") - 1, 0, len(T_grid) - 2))
+            i_hi = i_lo + 1
+            alpha    = (T_clamped - T_grid[i_lo]) / (T_grid[i_hi] - T_grid[i_lo])
+            skew_lo  = np.interp(k_query, k_grid, skew_array[i_lo])
+            skew_hi  = np.interp(k_query, k_grid, skew_array[i_hi])
+            skew     = (1 - alpha) * skew_lo + alpha * skew_hi
+            # Return as a pseudo total-variance so the plotting pipeline stays unchanged
+            return  skew
+
+        return predict
+
     else:
         raise ValueError(f"Unsupported surface method: '{method}'")
 
 
-def plot_iv_surface_interactive(df_smile, surface_result,
+def plot_surface_interactive(df_smile, surface_result,
                                 n_k=250, n_t=250,
                                 k_clip=0.45,
                                 iv_clip=(0.0, 1.5),
-                                k_range=None):
+                                k_range=None,
+                                is_volatility = True):
     if surface_result is None:
         return
 
@@ -112,12 +142,15 @@ def plot_iv_surface_interactive(df_smile, surface_result,
     IV_mesh = np.full((len(k_grid), len(T_grid)), np.nan)
 
     for j, T in enumerate(T_grid):
-        total_var = predict(T, k_grid)
-        if total_var is None:
+        values = predict(T, k_grid)
+        if values is None:
             continue
-        total_var = np.clip(total_var, 1e-12, (iv_ceil ** 2) * T)
-        iv = np.sqrt(total_var / T)
-        IV_mesh[:, j] = np.clip(iv, iv_floor, iv_ceil)
+        if is_volatility:
+            values = np.clip(values, 1e-12, (iv_ceil ** 2) * T)
+            values = np.sqrt(values / T)
+            values = np.clip(values, iv_floor, iv_ceil)
+        IV_mesh[:, j] = values
+
 
     for i in range(IV_mesh.shape[0]):
         row = IV_mesh[i, :]
@@ -144,7 +177,7 @@ def plot_iv_surface_interactive(df_smile, surface_result,
         scene=dict(
             xaxis_title="Time to Maturity (T)",
             yaxis_title="Log-Moneyness k = log(K/F)",
-            zaxis_title="Implied Volatility",
+            zaxis_title="Implied Volatility" if is_volatility else "IV Skew ∂IV/∂k",
             aspectmode="manual",
             aspectratio=dict(x=1, y=1, z=1),
             xaxis=dict(range=[float(T_grid.min()), float(T_grid.max())]),
