@@ -56,5 +56,4 @@ if __name__ == "__main__":
     fig_surface.show()
 
     raw_skew, fig_skew = run_malliavin_heston_skew(surface_raw=raw_surface)
-    print(raw_skew.keys())
     fig_skew.show()

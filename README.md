@@ -115,7 +115,7 @@ python -m src.volatility.pipeline.run_calibration
 python -m src.volatility.pipeline.run_analysis
 
 # Heston + Malliavin IV surface
-python -m src.volatility.pipeline.run_malliavin_heston_iv
+python -m src.volatility.pipeline.run_malliavin_heston
 ```
 
 The interactive notebook `tests/test.ipynb` walks through each step with inline outputs.
