@@ -67,7 +67,7 @@ HESTON_R        = 0.0       # risk-free rate (zero-rate assumption)
 HESTON_KAPPA = 5.0    # mean-reversion speed
 HESTON_THETA = 0.04   # long-run variance  → 20 % long-run vol
 HESTON_XI    = 0.7    # vol-of-vol
-HESTON_RHO   = -0.1   # spot/vol Brownian correlation
+HESTON_RHO   = -0.7   # spot/vol Brownian correlation
 HESTON_S0    = 1.0    # normalised spot
 HESTON_V0    = 0.04   # initial variance   → 20 % initial vol
 
