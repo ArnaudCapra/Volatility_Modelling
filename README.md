@@ -26,11 +26,11 @@ K(t-s, H_s) = \frac{\sqrt{2H_s \sin(\pi H_s) \Gamma(2H_s)}}{\Gamma(H_s + \frac{1
 dH_t = \lambda(\eta - H_t)dt + \zeta\sqrt{H_t(1 - H_t)}dB_t(\omega_3)
 \end{cases}$$
 
-The three Brownian drivers $(\omega_1, \omega_2, \omega_3)$ are **correlated white noise**, making the skew, vol-of-vol, and roughness structurally interdependent.
+The three Brownian drivers $(\omega_1, \omega_2, \omega_3)$ are **correlated white noise**
 
 **Why this construction matters — two key properties:**
 
-1. **Orthogonality of heterogeneity layers.** Because $H_s$ is adapted to the filtration of $B(\omega_2)$ (as established in *Regularity of Multifractional Moving Average Processes with Random Hurst Exponent*), the heterogeneity of the volatility process is orthogonal from the heterogeneity of the roughness process. This allows the Hurst exponent to be modelled as a genuine stochastic process without contaminating the variance process.
+1. **Orthogonality of heterogeneity layers.** Because $H_s$ is adapted to the filtration of $B(\omega_2)$ (as established in *Regularity of Multifractional Moving Average Processes with Random Hurst Exponent*), the heterogeneity of the volatility process is orthogonal from the heterogeneity of the roughness process. This allows the Hurst exponent to be modelled as a stochastic process without capping the effective roughness of the volatility process (as it would, were the kernel of the form K(t-s, H_t)).
 
 2. **Correlated roughness.** Since $H_s$ is adapted to the same filtration as the volatility driver, it can be correlated with volatility itself, enabling the model to encode the empirical observation that periods of high volatility tend to coincide with changes in the roughness regime.
 
@@ -40,7 +40,7 @@ The Hurst exponent is modelled as a **Jacobi diffusion**:
 
 $$dH_t = \lambda(\eta - H_t)\,dt + \zeta\sqrt{H_t(1 - H_t)}\,dB_t(\omega_3)$$
 
-This is a mean-reverting process on $(0, 1)$, analogous to the Feller condition for CIR. Parameter restrictions (analogous to $2\lambda min(\eta, 1-\eta) > \zeta^2$) ensure $H_t$ stays strictly inside $(0, 1)$, so that the kernel $K$ remains well-defined at all times. The ergodic distribution is a **Beta distribution** $(H_\infty \sim \mathcal{B}(\dfrac{2\lambda\eta}{\zeta^{2}},\dfrac{2\lambda(1-\eta)}{\zeta^{2}} ))$, making the parametrisation highly interpretable: $\eta$ controls the long-run average roughness, $\lambda$ its mean-reversion speed, and $\zeta$ the variability of the Hurst exponent.
+This is a mean-reverting process on $[0, 1]$, analogous to the Feller condition for CIR. Parameter restrictions (analogous to $2\lambda min(\eta, 1-\eta) > \zeta^2$) ensure $H_t$ stays strictly inside $(0, 1)$, so that the kernel $K$ remains well-defined at all times (square integrable). The ergodic distribution is a **Beta distribution** $(H_\infty \sim \mathcal{B}(\dfrac{2\lambda\eta}{\zeta^{2}},\dfrac{2\lambda(1-\eta)}{\zeta^{2}}))$, making the parametrisation highly interpretable: $\eta$ controls the long-run average roughness, $\lambda$ its mean-reversion speed, and $\zeta$ the variability of the Hurst exponent.
 
 ### 3. IV Surface and Skew via Malliavin Calculus (Alos Theorem)
 
