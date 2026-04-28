@@ -42,9 +42,9 @@ $$dH_t = \lambda(\eta - H_t)\,dt + \zeta\sqrt{H_t(1 - H_t)}\,dB_t(\omega_3)$$
 
 This is a mean-reverting process on $[0, 1]$, analogous to the Feller condition for CIR. Parameter restrictions (analogous to $2\lambda min(\eta, 1-\eta) > \zeta^2$) ensure $H_t$ stays strictly inside $(0, 1)$, so that the kernel $K$ remains well-defined at all times (square integrable). The ergodic distribution is a **Beta distribution** $(H_\infty \sim \mathcal{B}(\dfrac{2\lambda\eta}{\zeta^{2}},\dfrac{2\lambda(1-\eta)}{\zeta^{2}}))$, making the parametrisation highly interpretable: $\eta$ controls the long-run average roughness, $\lambda$ its mean-reversion speed, and $\zeta$ the variability of the Hurst exponent.
 
-### 3. IV Surface and Skew via Malliavin Calculus (Alos Theorem)
+### 3. IV Surface and Skew via Malliavin Calculus (*Malliavin Calculus in Finance Theory and Practice*)
 
-The implied volatility and its ATM skew are computed analytically using the **Alos representation theorem**. The effective volatility, the Malliavin derivative of variance, and the correction operators are defined as:
+The implied volatility and its ATM skew are computed analytically using a representation theorem found by Alòs and Lorite. The effective volatility, the Malliavin derivative of variance, and the correction operators are defined as:
 
 $$v_t = \sqrt{\frac{\int_t^T \sigma_s^2\, ds}{T-t}}, \quad V_t^0 = E_t[BS(t, X_t, k, v_t)], \quad I_t^0(k) = BS^{-1}(k, V_t^0)$$
 
@@ -56,7 +56,7 @@ $$I_t(k) = I_t^0(k) + \frac{\rho}{2} E_t\!\left[\int_t^T \frac{e^{-r(s-t)}}{\tex
 
 $$\frac{\partial I_t}{\partial k}(k_t^*) = \frac{E_t\!\left[\int_t^T \left(\frac{\partial F}{\partial k} - \frac{1}{2}F\right)ds\right]}{\text{Vega}_t}, \quad F = \frac{\rho}{2} e^{-r(s-t)} H \Phi_s$$
 
-This representation is exact for Heston and serves as the foundation for the MPCE surface approximation once the Malliavin derivative is adapted to the stochastic-$H$ kernel.
+This representation is exact for general semi-martingale spot processes (regardless of the non-markovianity of the volatility process) and serves as the foundation for the MPCE surface approximation once the Malliavin derivative is adapted to the stochastic-$H$ kernel.
 
 ---
 
