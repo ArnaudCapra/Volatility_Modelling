@@ -40,7 +40,7 @@ The Hurst exponent is modelled as a **Jacobi diffusion**:
 
 $$dH_t = \lambda(\eta - H_t)\,dt + \zeta\sqrt{H_t(1 - H_t)}\,dB_t(\omega_3)$$
 
-This is a mean-reverting process on $(0, 1)$, analogous to the Feller condition for CIR. Parameter restrictions (analogous to $2\lambda min(\eta, 1-\eta) > \zeta^2$) ensure $H_t$ stays strictly inside $(0, 1)$, so that the kernel $K$ remains well-defined at all times. The ergodic distribution is a **Beta distribution** $(\H_{\infty} \sim \mathcal{N}(\dfrac{2\lambda\eta}{\zeta^{2}},\dfrac{2\lambda(1-\eta)}{\zeta^{2}} ))$, making the parametrisation highly interpretable: $\eta$ controls the long-run average roughness, $\lambda$ its mean-reversion speed, and $\zeta$ the variability of the Hurst exponent.
+This is a mean-reverting process on $(0, 1)$, analogous to the Feller condition for CIR. Parameter restrictions (analogous to $2\lambda min(\eta, 1-\eta) > \zeta^2$) ensure $H_t$ stays strictly inside $(0, 1)$, so that the kernel $K$ remains well-defined at all times. The ergodic distribution is a **Beta distribution** $(\H_\infty \sim \mathcal{B}(\dfrac{2\lambda\eta}{\zeta^{2}},\dfrac{2\lambda(1-\eta)}{\zeta^{2}} ))$, making the parametrisation highly interpretable: $\eta$ controls the long-run average roughness, $\lambda$ its mean-reversion speed, and $\zeta$ the variability of the Hurst exponent.
 
 ### 3. IV Surface and Skew via Malliavin Calculus (Alos Theorem)
 
