@@ -2,7 +2,9 @@
 
 ### I am currently transfering (very slowly) code that I've had for ages in my computer. The overal achitecture of the project will be subject to change as I implement more features and group them differently. 
 
-(Soon to be) A Python library for calibrating and analysing implied volatility surfaces, with a theoretical focus on the term structure of the ATM skew and its modelling via a **Multifractional Process with Correlated Exponent (MPCE)**.
+(Soon to be) A Python library for calibrating and analysing implied volatility surfaces, with a theoretical focus on the term structure of the ATM skew and its modelling via a **Multifractional Process with Correlated Exponent (MPCE)**. 
+
+### This README is written by Claude based on some of the written work I have on my PC, soon to be updated
 
 ---
 
