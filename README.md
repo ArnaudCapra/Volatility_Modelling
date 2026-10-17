@@ -42,7 +42,7 @@ The three Brownian drivers $(\omega_1, \omega_2, \omega_3)$ are **correlated whi
 
 The Hurst exponent is modelled as a **Jacobi diffusion**:
 
-$$dH_t = \lambda(\eta - H_t)\,dt + \zeta\sqrt{H_t(1 - H_t)}\,dB_t(\omega_3)$$
+$$dH_t = \lambda(\eta - H_t)dt + \zeta\sqrt{H_t(1 - H_t)}dB_t(\omega_3)$$
 
 This is a mean-reverting process on $[0, 1]$, analogous to the Feller condition for CIR. Parameter restrictions (analogous to $2\lambda min(\eta, 1-\eta) > \zeta^2$) ensure $H_t$ stays strictly inside $(0, 1)$, so that the kernel $K$ remains well-defined at all times (square integrable). The ergodic distribution is a **Beta distribution** $(H_\infty \sim \mathcal{B}(\dfrac{2\lambda\eta}{\zeta^{2}},\dfrac{2\lambda(1-\eta)}{\zeta^{2}}))$, making the parametrisation highly interpretable: $\eta$ controls the long-run average roughness, $\lambda$ its mean-reversion speed, and $\zeta$ the variability of the Hurst exponent.
 
@@ -56,11 +56,11 @@ $$G = (\partial_x^2 - \partial_x)BS, \quad H = \partial_x G, \quad \Phi_s = \sig
 
 The full implied volatility and its skew are then given by:
 
-$$I_t(k) = I_t^0(k) + \frac{\rho}{2} E_t\!\left[\int_t^T \frac{e^{-r(s-t)}}{\text{Vega}} H(s, X_s, k, v_s)\,\Gamma_s\, ds\right]$$
+$$I_t(k) = I_t^0(k) + \frac{\rho}{2} E_t\left[\int_t^T \frac{e^{-r(s-t)}}{\text{Vega}} H(s, X_s, k, v_s)\,\Gamma_s\, ds\right]$$
 
-$$\frac{\partial I_t}{\partial k}(k_t^*) = \frac{E_t\!\left[\int_t^T \left(\frac{\partial F}{\partial k} - \frac{1}{2}F\right)ds\right]}{\text{Vega}_t}, \quad F = \frac{\rho}{2} e^{-r(s-t)} H \Phi_s$$
+$$\frac{\partial I_t}{\partial k}(k_t^*) = \frac{E_t\left[\int_t^T \left(\frac{\partial F}{\partial k} - \frac{1}{2}F\right)ds\right]}{\text{Vega}_t}, \quad F = \frac{\rho}{2} e^{-r(s-t)} H \Phi_s$$
 
-This representation is exact for general semi-martingale spot processes (regardless of the non-markovianity of the volatility process) and serves as the foundation for the MPCE surface approximation once the Malliavin derivative is adapted to the stochastic-$H$ kernel.
+This representation is exact for general semi-martingale spot processes (regardless of the non-markovianity of the volatility process) and serves as the foundation for the MPCE surface approximation once the Malliavin derivative is adapted to the H-stochastic kernel.
 
 ---
 
