@@ -12,7 +12,7 @@
 
 Empirical studies of the S&P 500 ATM skew (notably *Yet Another Analysis of the S&P 500 At-the-Money Skew: Crossover of Different Power-Law Behaviours*) document a clear bifurcation in the term structure of the skew: it follows one power law for maturities up to roughly 2–3 months, and a different, flatter one thereafter. Rough volatility models (Rough Heston, rBergomi) capture the short-end behaviour well — their Hurst exponent $H < \frac{1}{2}$ produces the correct explosion — but they fail at longer maturities without introducing additional factors.
 
-The authors allude that this could be resolved if the **Hurst exponent were itself time-varying**. This project takes that hypothesis seriously and builds a full pipeline around it.
+The authors allude that this could be resolved if the **Hurst exponent were itself time-varying**. This project attempts to test this hypothesis.
 
 ---
 
@@ -34,7 +34,7 @@ The three Brownian drivers $(\omega_1, \omega_2, \omega_3)$ are **correlated whi
 
 **Why this construction matters — two key properties:**
 
-1. **Orthogonality of heterogeneity layers.** Because $H_s$ is adapted to the filtration of $B(\omega_2)$ (as established in *Regularity of Multifractional Moving Average Processes with Random Hurst Exponent*), the heterogeneity of the volatility process is orthogonal from the heterogeneity of the roughness process. This allows the Hurst exponent to be modelled as a stochastic process without capping the effective roughness of the volatility process (as it would, were the kernel of the form K(t-s, H_t)).
+1. **Orthogonality of heterogeneity layers.** Because $H_s$ is adapted to the filtration of $B(\omega_2)$ (as established in *Regularity of Multifractional Moving Average Processes with Random Hurst Exponent*), the heterogeneity of the volatility process is orthogonal from the heterogeneity of the roughness process. This allows the Hurst exponent to be modelled as a stochastic process without capping the effective roughness of the volatility process (as it would, were the kernel of the form K(t-s, H_t) as opposed to K(t-s, H_t)).
 
 2. **Correlated roughness.** Since $H_s$ is adapted to the same filtration as the volatility driver, it can be correlated with volatility itself, enabling the model to encode the empirical observation that periods of high volatility tend to coincide with changes in the roughness regime.
 
