@@ -54,9 +54,11 @@ $$v_t = \sqrt{\frac{\int_t^T \sigma_s^2\, ds}{T-t}}, \quad V_t^0 = E_t[BS(t, X_t
 
 $$G = (\partial_x^2 - \partial_x)BS, \quad H = \partial_x G, \quad \Phi_s = \sigma_s \int_s^T D_s^W \sigma_u^2\, du$$
 
+$$\Gamma_s = \quad V_t^0 + \frac{\rho}{2} E_t\left[\int_t^s e^{-r(u-t)} H(u, X_u, k, v_u)\Phi_u du\right]$$
+
 The full implied volatility and its skew are then given by:
 
-$$I_t(k) = I_t^0(k) + \frac{\rho}{2} E_t\left[\int_t^T \frac{e^{-r(s-t)}}{\text{Vega}} H(s, X_s, k, v_s)\,\Gamma_s\, ds\right]$$
+$$I_t(k) = I_t^0(k) + \frac{\rho}{2} E_t\left[\int_t^T \frac{e^{-r(s-t)}}{\text{Vega}} H(s, X_s, k, v_s)\Gamma_s ds\right]$$
 
 $$\frac{\partial I_t}{\partial k}(k_t^*) = \frac{E_t\left[\int_t^T \left(\frac{\partial F}{\partial k} - \frac{1}{2}F\right)ds\right]}{\text{Vega}_t}, \quad F = \frac{\rho}{2} e^{-r(s-t)} H \Phi_s$$
 
